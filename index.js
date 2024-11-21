@@ -70,8 +70,17 @@ app.delete('/api/persons/:id', (request, response) => {
 // add entry
 app.post('/api/persons', (request, response) => {
     const body = request.body
-    if (!body.name || !body.number) {
-        return response.status(400).json({error: 'content missing'})
+    if (!body) {
+        return response.status(400).json({error: 'invalid request content'})
+    }
+    if (!body.name) {
+        return response.status(400).json({error: 'content must contain a name'})
+    }
+    if (!body.number) {
+        return response.status(400).json({error: 'content must contain a number'})
+    }
+    if (persons.find(person => person.name.toLowerCase() === body.name.toLowerCase())) {
+        return response.status(400).json({error: 'name must be unique'})
     }
 
     const person = {
