@@ -28,8 +28,17 @@ let notes = [
 // get rid of the annoying favicon error
 app.use(express.static(path.join(__dirname, 'public')))
 
+app.use((request, response, next) => {
+    request.requestTime = new Date()
+    next()
+})
+
 app.get('/', (request, response) => {
     response.send('<h2>Phonebook<h2>')
+})
+
+app.get('/info', (request, response) => {
+    response.send(`<p>Phonebook has info for ${notes.length} people</p><p>${request.requestTime}</p>`)
 })
 
 app.get('/api/persons', (request, response) => {
