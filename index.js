@@ -1,5 +1,5 @@
-const { log } = require('console')
 const express = require('express')
+const morgan = require('morgan')
 const path = require('path')
 const app = express()
 
@@ -30,26 +30,26 @@ const randomId = (max) => {
     return Math.floor(Math.random()*max)
 }
 
-// get rid of the annoying favicon error
 app.use(express.static(path.join(__dirname, 'public')))
-// middleware for request time
+
 app.use((request, response, next) => {
     request.requestTime = new Date()
     next()
 })
-// middleware for parsing JSON requests
+
 app.use(express.json())
 
-// front page
+app.use(morgan('tiny'))
+
+
 app.get('/', (request, response) => {response.send('<h2>Phonebook<h2>')})
-// info page
+
 app.get('/info', (request, response) => {
     response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${request.requestTime}</p>`)
 })
 
-// get all
 app.get('/api/persons', (request, response) => {response.json(persons)})
-// get one
+
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
     const person = persons.find(person => person.id === id)
@@ -60,14 +60,12 @@ app.get('/api/persons/:id', (request, response) => {
     }
 })
 
-// delete one
 app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
 })
 
-// add entry
 app.post('/api/persons', (request, response) => {
     const body = request.body
     if (!body) {
