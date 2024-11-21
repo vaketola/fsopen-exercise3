@@ -1,3 +1,4 @@
+const { log } = require('console')
 const express = require('express')
 const path = require('path')
 const app = express()
@@ -25,6 +26,10 @@ let persons = [
     }
 ]
 
+const randomId = (max) => {
+    return Math.floor(Math.random()*max)
+}
+
 // get rid of the annoying favicon error
 app.use(express.static(path.join(__dirname, 'public')))
 // middleware for request time
@@ -32,6 +37,8 @@ app.use((request, response, next) => {
     request.requestTime = new Date()
     next()
 })
+// middleware for parsing JSON requests
+app.use(express.json())
 
 // front page
 app.get('/', (request, response) => {response.send('<h2>Phonebook<h2>')})
@@ -58,6 +65,24 @@ app.delete('/api/persons/:id', (request, response) => {
     const id = request.params.id
     persons = persons.filter(person => person.id !== id)
     response.status(204).end()
+})
+
+// add entry
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+    if (!body.name || !body.number) {
+        return response.status(400).json({error: 'content missing'})
+    }
+
+    const person = {
+        name:   body.name,
+        number: body.number,
+        id:     String(randomId(persons.length * 10000)) // I hate this
+    }
+    // console.log(person)
+
+    persons = persons.concat(person)
+    response.json(person)
 })
 
 const PORT = 3001
