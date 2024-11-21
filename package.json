@@ -1,0 +1,27 @@
+{
+  "name": "fsopen-exercise3",
+  "version": "1.0.0",
+  "description": "exercises for part 3 of the full stack open course",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vaketola/fsopen-exercise3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vaketola/fsopen-exercise3/issues"
+  },
+  "homepage": "https://github.com/vaketola/fsopen-exercise3#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
