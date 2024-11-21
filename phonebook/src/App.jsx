@@ -100,19 +100,22 @@ const App = () => {
     event.preventDefault()
     const match = persons.find(person => person.name === newName)
     if (match) {
-      if (confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
-        const newPerson = {name:newName, number:newNumber}
-        personService.update(match.id, newPerson)
-                     .then(() => {
-                      setPersons(updateNumber(persons, match, newNumber))
-                      setNewName('')
-                      setNewNumber('')
+      setNewName('')
+      setNewNumber('')
+      setErrorMessage(`${newName} is already added to the phonebook`)
+      setTimeout(() => {setErrorMessage(null)}, 3000)
+      // if (confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+      //   const newPerson = {name:newName, number:newNumber}
+      //   personService.update(match.id, newPerson)
+      //                .then(() => {
+      //                 setPersons(updateNumber(persons, match, newNumber))
+      //                 setNewName('')
+      //                 setNewNumber('')
 
-                      setSuccessMessage(`Updated ${newName}`)
-                      setTimeout(() => {setSuccessMessage(null)}, 3000)
-                     })
-      }
-      
+      //                 setSuccessMessage(`Updated ${newName}`)
+      //                 setTimeout(() => {setSuccessMessage(null)}, 3000)
+      //                })
+      // }
     } else {
       const newPerson = {name:newName, number:newNumber}
       personService.create(newPerson)
