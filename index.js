@@ -27,20 +27,22 @@ let persons = [
 
 // get rid of the annoying favicon error
 app.use(express.static(path.join(__dirname, 'public')))
-
+// middleware for request time
 app.use((request, response, next) => {
     request.requestTime = new Date()
     next()
 })
 
+// front page
 app.get('/', (request, response) => {response.send('<h2>Phonebook<h2>')})
-
+// info page
 app.get('/info', (request, response) => {
     response.send(`<p>Phonebook has info for ${persons.length} people</p><p>${request.requestTime}</p>`)
 })
 
+// get all
 app.get('/api/persons', (request, response) => {response.json(persons)})
-
+// get one
 app.get('/api/persons/:id', (request, response) => {
     const id = request.params.id
     const person = persons.find(person => person.id === id)
@@ -49,6 +51,13 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
         response.status(404).end()
     }
+})
+
+// delete one
+app.delete('/api/persons/:id', (request, response) => {
+    const id = request.params.id
+    persons = persons.filter(person => person.id !== id)
+    response.status(204).end()
 })
 
 const PORT = 3001
